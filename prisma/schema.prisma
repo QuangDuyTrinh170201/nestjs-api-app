@@ -15,12 +15,15 @@ datasource db {
 
 model User{
   id Int @id @default(autoincrement())
-  email String
+  email String @unique
   hashedPassword String
-  firstName String
-  lastName String
+  firstName String? //can be null (optional)
+  lastName String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  notes Note []
+
+  @@map("user") //users id 'table name' in postgres SQL
 }
 
 model Note{
@@ -31,4 +34,8 @@ model Note{
   //other fields ..
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  userId Int //link to foreign table
+  user User @relation(fields: [userId], references: [id])
+  @@map("notes")
 }
